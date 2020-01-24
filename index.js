@@ -15,8 +15,8 @@ dawn.on('ready', () => {
 })
 
 dawn.on('message', (msg) => {   
-  if (msg.content === 'ping') {
-    msg.channel.send('pong')
+  if (msg.content === '안녕') {
+    msg.channel.send('안녕!')
   }
 })
 
