@@ -20,7 +20,7 @@ dawn.on('message', (msg) => {
   }
 })
 
-/* 스승님 이 부분 도와주세요.
+/* 스승님 이 부분 도와주세요....
   dawn.setInterval((arg) => {
     message.channel.send(arg)
   },10000, "Hello, world!")
