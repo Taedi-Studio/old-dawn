@@ -3,11 +3,14 @@ const path = require('path').resolve()
 const { Client } = require('discord.js')
 
 const dawn = new Client()
-let settings
+let settings; let chats = []
 
 if (existsSync(path + '/settings.json')) settings = require(path + '/settings.json')
 else console.log('Warning! ./settings.json File is not exist')
 const token = !settings ? process.env.dawnToken : settings.token
+
+if (existsSync(path + '/chats.json')) chats = require(path + '/chats.json')
+else console.log('Warning! ./chats.json File is not exist')
 
 const activityCycles = ['하나', '두울', '세엣']
 
@@ -24,7 +27,8 @@ dawn.on('ready', () => {
 })
 
 dawn.on('message', (msg) => {
-  if (msg.content === '안녕') { // 매우 비추천
-    msg.channel.send('안녕!')
-  }
+  if (msg.author.bot || !msg.guild) return
+
+  const query = chats.filter((v) => v['입력'] === msg.content)
+  if (query.length > 0) msg.channel.send(query[query.length - 1]['출력'])
 })
