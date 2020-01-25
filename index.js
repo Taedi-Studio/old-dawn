@@ -1,27 +1,30 @@
-const { writeFileSync } = require('fs')
+const { existsSync } = require('fs')
 const path = require('path').resolve()
-const discord = require('discord.js')
-const dawn = new discord.Client()
+const { Client } = require('discord.js')
 
-const settings = require(path + '/settings.json')
+const dawn = new Client()
+let settings
 
-dawn.login(settings.token)
+if (existsSync(path + '/settings.json')) settings = require(path + '/settings.json')
+else console.log('Warning! ./settings.json File is not exist')
+const token = !settings ? process.env.dawnToken : settings.token
+
+const activityCycles = ['하나', '두울', '세엣']
+
+dawn.login(token)
 
 dawn.on('ready', () => {
-  dawn.user.setActivity('Testing', { type: 'LISTENING' })
+  // setInterval은 JS 내장 함수
+  setInterval(() => { // 콜백함수 & 화살표 함수
+    dawn.user.setActivity(activityCycles[Math.floor(Math.random() * activityCycles.length)]) // 렌덤 아이템 선택
+  }, 1000) // 1000ms = 1초
 
-  console.log('Dawn bot is online!')
-  console.log('Invite Link: https://discordapp.com/api/oauth2/authorize?client_id=' + settings.client_id + '&permissions=0&scope=bot')
+  console.log('Dawn bot is now online!')
+  dawn.generateInvite().then(console.log) // discord.js 자체에 초대 링크 생성기가 있음
 })
 
-dawn.on('message', (msg) => {   
-  if (msg.content === '안녕') {
+dawn.on('message', (msg) => {
+  if (msg.content === '안녕') { // 매우 비추천
     msg.channel.send('안녕!')
   }
 })
-
-/* 스승님 이 부분 도와주세요....
-  dawn.setInterval((arg) => {
-    message.channel.send(arg)
-  },10000, "Hello, world!")
-*/
