@@ -1,8 +1,7 @@
-const { Client, RichEmbed } = require('discord.js')
+const { Client } = require('discord.js')
 const { readdir, existsSync } = require('fs')
 const path = require('path').resolve()
 
-const searchOption = { maxResults: 0, key: 'AIzaSyCm6DTMjC1UB190WPZtOjvChYwlMdfzpuU' }
 const dawn = new Client()
 let settings; let chats = []; const disparts = {}
 
@@ -18,6 +17,8 @@ const activityCycles = ['봇 구동!', '테스트하는중', '다운봇 부활',
 
 const commands = []
 readdir(path + '/commands/', (err, files) => {
+  if (err) console.log(err)
+
   files.forEach((f) => {
     const s = f.replace('.js', '')
     const fnc = require('./commands/' + s)
@@ -44,5 +45,5 @@ dawn.on('message', (msg) => {
   if (query) return query.fnc(dawn, msg, disparts)
 
   const query2 = chats.filter((v) => v['입력'] === msg.content)
-  if (query2.length > 0) msg.channel.send(query[query2.length - 1]['출력'])
+  if (query2.length > 0) msg.channel.send(query2[query2.length - 1]['출력'])
 })
